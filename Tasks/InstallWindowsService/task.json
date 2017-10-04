@@ -1,0 +1,187 @@
+{
+    "id": "2268a443-aa59-4074-9514-35d89ae0bb5c",
+    "name": "Install Windows Service",
+    "friendlyName": "Install Windows Service",
+    "description": "Installs a windows service",
+    "helpMarkDown": "",
+    "category": "Deploy",
+    "visibility": [
+        "Build",
+        "Release"
+    ],
+    "author": "Adam Brunk - Medical Council Of Canada",
+    "version": {
+        "Major": 0,
+        "Minor": 5,
+        "Patch": 2
+    },
+    "instanceNameFormat": "Install Windows Service",
+    "groups": [
+        {
+            "name": "config",
+            "displayName": "Configuration",
+            "isExpanded": true
+        },
+        {
+            "name": "serviceinfo",
+            "displayName": "Service Information",
+            "isExpanded": true
+        },
+        {
+            "name": "advanced",
+            "displayName": "Advanced",
+            "isExpanded": false
+        }
+    ],
+    "inputs": [
+        {
+            "name": "Server",
+            "type": "string",
+            "label": "Destination Computer",
+            "defaultValue": "",
+            "required": true,
+            "groupName": "config",
+            "helpMarkDown": "The target server/computer to install the service on."
+        },
+        {
+            "name": "AdminUsername",
+            "type": "string",
+            "label": "Admin Username",
+            "defaultValue": "",
+            "required": true,
+            "groupName": "config",
+            "helpMarkDown": "The user used to login in to the server with that will perfrom the install."
+        },
+        {
+            "name": "AdminPassword",
+            "type": "string",
+            "label": "Admin Password",
+            "defaultValue": "",
+            "required": true,
+            "groupName": "config",
+            "helpMarkDown": "Password for the admin user above."
+        },
+        {
+            "name": "ServiceName",
+            "type": "string",
+            "label": "Service Name",
+            "defaultValue": "",
+            "required": true,
+            "groupName": "serviceinfo",
+            "helpMarkDown": "The name of the service."
+        },
+        {
+            "name": "BinPath",
+            "type": "multiLine",
+            "label": "BinPath",
+            "defaultValue": "",
+            "required": true,
+            "groupName": "serviceinfo",
+            "helpMarkDown": "Path to the binary for the service."
+        },
+        {
+            "name": "Description",
+            "type": "string",
+            "label": "Description",
+            "defaultValue": "",
+            "required": false,
+            "groupName": "serviceinfo",
+            "helpMarkDown": "Description for this service."
+        },
+        {
+            "name": "ChangeUser",
+            "type": "boolean",
+            "label": "Change the default user?",
+            "defaultValue": "false",
+            "required": true,
+            "groupName": "serviceinfo",
+            "helpMarkDown": "Change the default user for the service?"
+        },
+        {
+            "name": "Username",
+            "type": "string",
+            "label": "Service Username",
+            "defaultValue": "",
+            "required": true,
+            "groupName": "serviceinfo",
+            "helpMarkDown": "User the service will run as.",
+            "visibleRule": "ChangeUser = true"  
+        },
+        {
+            "name": "Password",
+            "type": "string",
+            "label": "Service Password",
+            "defaultValue": "",
+            "required": true,
+            "groupName": "serviceinfo",
+            "helpMarkDown": "Password the service will use.",
+            "visibleRule": "ChangeUser = true"  
+        },
+        {
+            "name": "StartUpType",
+            "type": "pickList",
+            "label": "Start Up Type",
+            "defaultValue": "auto",
+            "required": true,
+            "groupName": "serviceinfo",
+            "helpMarkDown": "The service's start up type.",
+            "options": {
+                "auto": "Automatic",
+                "delayed-auto": "Automatic (Delayed Start)",
+                "demand": "Manual",
+                "disabled": "Disabled"
+            }
+        },
+        {
+            "name": "Start",
+            "type": "boolean",
+            "label": "Start Up After Install?",
+            "defaultValue": "true",
+            "required": true,
+            "groupName": "serviceinfo",
+            "helpMarkDown": "Does the service start after it's installed?"
+        },
+        {
+            "name": "DependsOn",
+            "type": "string",
+            "label": "Depends On",
+            "defaultValue": "",
+            "groupName": "advanced",
+            "required": false,
+            "helpMarkDown": "Specifies the names of services or groups that must start before this service. The names are separated by forward slashes (/)."
+        },
+        {
+            "name": "EnableFailure",
+            "type": "boolean",
+            "label": "Enable Failure Options",
+            "defaultValue": "false",
+            "groupName": "advanced",
+            "helpMarkDown": "Select this option to enable faliure options for this service. [More Information](https://technet.microsoft.com/en-us/library/cc742019%28v=ws.11%29.aspx?f=255&MSPPError=-2147217396)"
+        },
+        {
+            "name": "ResetFailure",
+            "type": "string",
+            "label": "Reset",
+            "defaultValue": "",
+            "required": false,
+            "groupName": "advanced",
+            "helpMarkDown": "Specifies the length of the period (in seconds) with no failures after which the failure count should be reset to 0 (zero). Note that this parameter requires the actions= parameter. [More Information](https://technet.microsoft.com/en-us/library/cc742019%28v=ws.11%29.aspx?f=255&MSPPError=-2147217396)",
+            "visibleRule": "EnableFailure = true"            
+        },
+        {
+            "name": "Actions",
+            "type": "string",
+            "label": "Actions",
+            "defaultValue": "",
+            "required": false,
+            "groupName": "advanced",
+            "helpMarkDown": "Specifies one or more failure actions and their delay times (in milliseconds), separated by a forward slash (/). Valid actions are run, restart, and reboot. If more than one action is specified, each action must be separated by a forward slash. Use actions= \"\" to take no action a service fails. Note that this parameter requires the reset= parameter. [More Information](https://technet.microsoft.com/en-us/library/cc742019%28v=ws.11%29.aspx?f=255&MSPPError=-2147217396)",
+            "visibleRule": "EnableFailure = true"            
+        }
+    ],
+    "execution": {
+        "PowerShell3": {
+        "target": "InstallWindowsService.ps1"
+        }
+    }
+}
